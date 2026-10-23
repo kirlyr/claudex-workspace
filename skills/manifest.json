@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "codexVersionTested": "0.163.0",
+  "skills": [
+    {
+      "name": "systematic-debugging",
+      "repository": "obra/superpowers",
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "version": "7.0.1",
+      "license": "MIT",
+      "path": "skills/systematic-debugging",
+      "files": [
+        {
+          "source": "skills/systematic-debugging/condition-based-waiting-example.ts",
+          "destination": "condition-based-waiting-example.ts",
+          "sha256": "40ae5ebe497fdf310200e43fe986552546d0a22837c0d39e855db1cfd33eb88e"
+        },
+        {
+          "source": "skills/systematic-debugging/condition-based-waiting.md",
+          "destination": "condition-based-waiting.md",
+          "sha256": "e89fec8400d6cd50f43407cec9fab50976ba4d55d0ec2eb51c0bd68036b54c26"
+        },
+        {
+          "source": "skills/systematic-debugging/CREATION-LOG.md",
+          "destination": "CREATION-LOG.md",
+          "sha256": "c24733a5b1821bd6bed1fc950261f0b9f4e90097e0bbb96459d8179713730789"
+        },
+        {
+          "source": "skills/systematic-debugging/defense-in-depth.md",
+          "destination": "defense-in-depth.md",
+          "sha256": "1e175fb86fc357e58c6aebf5441e481e1b7868b4380c0456b63a17eefbd18ba7"
+        },
+        {
+          "source": "skills/systematic-debugging/find-polluter.sh",
+          "destination": "find-polluter.sh",
+          "sha256": "dd7b8f13c4cc2a24b33ff87b18da9248f3e1c80a085c3316224f69ff0fa5c43c"
+        },
+        {
+          "source": "skills/systematic-debugging/root-cause-tracing.md",
+          "destination": "root-cause-tracing.md",
+          "sha256": "75b933b6a8c40bdb2031b10f21654395b56ec6ab6bc7b018c18d3fe57aeb7fb8"
+        },
+        {
+          "source": "skills/systematic-debugging/SKILL.md",
+          "destination": "SKILL.md",
+          "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202"
+        },
+        {
+          "source": "skills/systematic-debugging/test-academic.md",
+          "destination": "test-academic.md",
+          "sha256": "fe2ba480d78ac0d686dc025f41c2a32a43d642bf533f91b0c6053a04d35d6486"
+        },
+        {
+          "source": "skills/systematic-debugging/test-pressure-1.md",
+          "destination": "test-pressure-1.md",
+          "sha256": "0b6a915db0054577819834c79be9eb614e97bddba10d73768e1fbe91cfed048a"
+        },
+        {
+          "source": "skills/systematic-debugging/test-pressure-2.md",
+          "destination": "test-pressure-2.md",
+          "sha256": "b2030aeffba07050e8ad573ddf87486457c4a016a786bb326235bebd856f2016"
+        },
+        {
+          "source": "skills/systematic-debugging/test-pressure-3.md",
+          "destination": "test-pressure-3.md",
+          "sha256": "96b50a52e2c7989c9cf20fb752c47c1e9a3a70dc362f8f7989f8f5b64dac7708"
+        },
+        {
+          "source": "LICENSE",
+          "destination": "LICENSE",
+          "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+        }
+      ]
+    },
+    {
+      "name": "test-driven-development",
+      "repository": "obra/superpowers",
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "version": "7.0.1",
+      "license": "MIT",
+      "path": "skills/test-driven-development",
+      "files": [
+        {
+          "source": "skills/test-driven-development/SKILL.md",
+          "destination": "SKILL.md",
+          "sha256": "64b03fce4aee5a97a93160cea8111f3ba13a17b7c001db4bd5836d67fd10705d"
+        },
+        {
+          "source": "skills/test-driven-development/writing-good-tests.md",
+          "destination": "writing-good-tests.md",
+          "sha256": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1"
+        },
+        {
+          "source": "LICENSE",
+          "destination": "LICENSE",
+          "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+        }
+      ]
+    },
+    {
+      "name": "verification-before-completion",
+      "repository": "obra/superpowers",
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "version": "7.0.1",
+      "license": "MIT",
+      "path": "skills/verification-before-completion",
+      "files": [
+        {
+          "source": "skills/verification-before-completion/SKILL.md",
+          "destination": "SKILL.md",
+          "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3"
+        },
+        {
+          "source": "LICENSE",
+          "destination": "LICENSE",
+          "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+        }
+      ]
+    },
+    {
+      "name": "database-migration",
+      "repository": "wshobson/agents",
+      "commit": "0874a27b17a22e2b7c2e2bcd725768e0803cad06",
+      "version": "framework-migration 1.3.2",
+      "license": "MIT",
+      "path": "plugins/framework-migration/skills/database-migration",
+      "files": [
+        {
+          "source": "plugins/framework-migration/skills/database-migration/references/details.md",
+          "destination": "references/details.md",
+          "sha256": "075f4fb3f511d93597c966c0d5fd86c7fb3797cb6cdc47e6b389fa0538b838d3"
+        },
+        {
+          "source": "plugins/framework-migration/skills/database-migration/SKILL.md",
+          "destination": "SKILL.md",
+          "sha256": "d388db68c9f86beba823247f910b6a91c2fe8e12ef9b30b6e49f4b1bf19f1ab1"
+        },
+        {
+          "source": "LICENSE",
+          "destination": "LICENSE",
+          "sha256": "f89abb55d9f073f38f1703e4518f0613c788c6174be7f13b8dfe48a1c076c746"
+        }
+      ]
+    }
+  ],
+  "preservedPlugins": [
+    {
+      "name": "ponytail",
+      "version": "5.3.2",
+      "managedByInstaller": false
+    }
+  ],
+  "memoryPilot": {
+    "repository": "thedotmack/claude-mem",
+    "commit": "dcb28a768c6be4b8e451843210558275caa8ec44",
+    "version": "15.0.1",
+    "enabled": false,
+    "status": "BLOCKED",
+    "provider": "codex",
+    "syntheticDataOnly": true
+  }
+}
