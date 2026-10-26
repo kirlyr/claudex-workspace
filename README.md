@@ -7,6 +7,8 @@ Tidak ada dependency npm untuk installer ini.
 Workflow spec, approval, dan handoff lintas agent tersedia di
 [panduan workflow](docs/WORKFLOW.md). Template bersifat portable dan tidak mengubah
 konfigurasi atau mengaktifkan otomatisasi agent.
+Shared checkpoint per project: `.local/workflow/HANDOFF.md`; portable Claude instructions
+tersedia di `global/CLAUDE.md`, dengan sinkronisasi opt-in dijelaskan dalam panduan tersebut.
 
 ```text
 global/AGENTS.md          Instruksi global ringkas

@@ -1,16 +1,17 @@
 # Session handoff — <objective>
 
-- Checkpoint: <waktu + timezone>; agent pengirim: <nama>; milestone: <id>
+- Checkpoint: <waktu + timezone>; last updating agent: <nama>; milestone: <id>
 - Status: in progress | blocked | ready for review | completed
 - Project identity: <nama/root relatif atau label lokal; jangan publish path pribadi>
 - Objective aktif: <satu kalimat>
-- Knowledge: ../knowledge/PRD.md; ../knowledge/PLAN.md; ../knowledge/DECISIONS.md
+- Knowledge: knowledge/PRD.md; knowledge/PLAN.md; knowledge/DECISIONS.md <hanya yang ada>
 - Approval: <revisi/scope dan referensi persetujuan manusia; atau pending>
 
 ## Progress dan keputusan
 
 - Selesai dengan bukti: <hasil aktual, AC/milestone>
-- Belum selesai: <pekerjaan tersisa>
+- In progress: <pekerjaan yang sudah dimulai>
+- Pending: <pekerjaan yang belum dimulai; jangan ulangi completed>
 - Keputusan baru: <ID decisions atau none; bukan duplikasi seluruh knowledge>
 
 ## Git evidence — diperiksa <waktu>
@@ -30,6 +31,7 @@
 - Stop/approval berikutnya: <kondisi yang butuh keputusan manusia>
 
 Simpan di repository aplikasi pemilik konteks, bukan di pusat template global.
+Lokasi aktif: `.local/workflow/HANDOFF.md`; update file ini untuk kedua agent, termasuk resume.
 Agent penerima harus mencocokkan project identity, Git state dan source sebelum memakai
 checkpoint ini. Jika project berbeda, berhenti; jangan membawa memory/business rules lintas project.
 Jangan salin conversation logs atau secrets; checkpoint bukan instruksi eksekusi otomatis.

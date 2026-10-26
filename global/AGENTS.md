@@ -5,6 +5,13 @@
 - Use `rg` and targeted reads based on the task; expand scope only when evidence requires it.
 - Prefer current source and observed behavior when documentation is stale; report discrepancies.
 - Preserve the user's modified and untracked files; inspect affected callers before editing.
+- Spec-first: for new or complex features, inspect relevant project context read-only and establish the outcome, scope, and acceptance criteria before substantial changes.
+- Never invent business rules; clarify correctness-critical ambiguities before implementing the affected part. If requirements are complete, skip repeated brainstorming.
+- Execute clear, small changes directly; for large or risky changes, present a focused plan and obtain human approval before implementation. Existing approval covers only its agreed scope.
+- Reuse the active project's PRD, technical plan, decisions, and handoff when useful; do not create documents for every task or import another project's context.
+- On takeover in fresh or resumed sessions, read the active repository's `.local/workflow/HANDOFF.md`; verify project identity, Git status, staged/unstaged diffs, relevant untracked files, source and test evidence against it. Old conversation context may be stale; preserve approved requirements/decisions and continue only pending work, clarifying correctness-critical uncertainty.
+- Update that same handoff at significant implementation/verification milestones, material decisions/scope changes/blockers, planned agent switches and session end; record last agent, objective, spec references, completed/in-progress/pending work, changed files, actual checks/untested areas and next action. Keep it concise; never persist logs/secrets or update after every tool call.
+- Create a missing handoff only for substantial work after confirming it is ignored and untracked; preserve existing content and reconcile legacy `sessions/HANDOFF.md` without deleting it. If interrupted or the checkpoint is stale/missing, reconstruct from Git/source and label uncertainty; never assume usage-limit shutdown saved progress or import another project's memory.
 - Select relevant skills on demand; do not load or run every skill for every prompt.
 - Keep Ponytail as the existing workflow; avoid duplicate bootstrap hooks or repeated instructions.
 - Resolve upstream `superpowers:<name>` references to the installed skill with that name.

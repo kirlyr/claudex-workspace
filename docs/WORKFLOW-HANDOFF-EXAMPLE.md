@@ -1,20 +1,21 @@
 # Contoh handoff sintetis — pembulatan invoice
 
 ILUSTRASI saja: project, SHA, approval dan hasil di bawah fiktif, bukan hasil test task ini.
-Setelah disalin ke sessions/HANDOFF.md, path knowledge relatif mengacu struktur panduan.
+Setelah disalin ke `.local/workflow/HANDOFF.md`, path knowledge relatif mengacu struktur panduan.
 
-- Checkpoint: 2026-10-26 14:00 +07:00; agent: Codex; milestone: M1
+- Checkpoint: 2026-10-26 14:00 +07:00; last updating agent: Codex; milestone: M1
 - Status: ready for review
 - Project identity: synthetic-invoice, root diverifikasi dengan git rev-parse
 - Objective: bulatkan diskon dalam sen sebelum pengurangan subtotal.
-- Knowledge: ../knowledge/PRD.md AC1; ../knowledge/PLAN.md r1; ../knowledge/DECISIONS.md D1
+- Knowledge: knowledge/PRD.md AC1; knowledge/PLAN.md r1; knowledge/DECISIONS.md D1
 - Approval: ilustrasi manusia menyetujui plan r1, M1 untuk src/invoice.js dan test/invoice.test.js;
   bukan izin deployment atau perubahan database.
 
 ## Progress dan keputusan
 
 - Selesai: regression half-cent ditambahkan, rumus pembulatan diperbaiki.
-- Belum selesai: review manusia; tidak ada commit atau push.
+- In progress: none.
+- Pending: review manusia; tidak ada commit atau push.
 - Keputusan: D1 memakai integer cents; API tetap sama.
 
 ## Git evidence — ilustrasi checkpoint

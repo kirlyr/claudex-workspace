@@ -68,3 +68,21 @@ test('updates managed upstream content and rejects rollback through a superseded
   assert.throws(()=>rollback({...f,journal:first.journal}),/superseded/i);
   rollback({...f,journal:updated.journal});assert.deepEqual(fs.readFileSync(path.join(f.home,'skills/demo/SKILL.md')),before);
 });
+
+test('Claude instructions use opt-in isolated home, conflict checks, backup and rollback',async()=>{
+  const f=fixture();fs.writeFileSync(path.join(f.packageRoot,'global/CLAUDE.md'),'Shared handoff rules\n');
+  fs.writeFileSync(path.join(f.home,'CLAUDE.md'),'Existing Claude rules\n');
+  const opts={...f,agent:'claude'};
+  await assert.rejects(install(opts),/unmanaged|conflict/i);
+  assert.equal(fs.readFileSync(path.join(f.home,'CLAUDE.md'),'utf8'),'Existing Claude rules\n');
+  fs.unlinkSync(path.join(f.home,'CLAUDE.md')); // Synthetic fixture only.
+  const first=await install(opts);assert.equal(verify(opts).filesMatch,true);
+  assert.equal(fs.readFileSync(path.join(f.home,'AGENTS.md'),'utf8'),'Previous user instructions\n');
+  assert.equal(fs.existsSync(path.join(f.home,'skills')),false);
+  assert.equal((await install(opts)).unchanged,true);
+  fs.writeFileSync(path.join(f.packageRoot,'global/CLAUDE.md'),'Updated shared rules\n');
+  const second=await install(opts);assert.notEqual(first.journal,second.journal);
+  rollback({...opts,journal:second.journal});assert.equal(fs.readFileSync(path.join(f.home,'CLAUDE.md'),'utf8'),'Shared handoff rules\n');
+  fs.writeFileSync(path.join(f.home,'CLAUDE.md'),'User change\n');
+  await assert.rejects(install(opts),/modified/i);
+});

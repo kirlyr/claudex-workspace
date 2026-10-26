@@ -3,7 +3,7 @@ const path=require('node:path');
 const {spawnSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 function allowed(p){
-  return /^(README\.md|\.gitignore|global\/AGENTS\.md|skills\/manifest\.json|hooks\/custom\/[\w.-]+|scripts\/[\w.-]+\.(?:cjs|ps1)|docs\/[\w.-]+\.md|tests\/[\w.-]+\.cjs)$/.test(p)&&!/(?:^|\/)(?:auth\.json|\.env[^/]*|backups|cache|runtime|memory|sessions)(?:\/|$)/i.test(p);
+  return /^(README\.md|\.gitignore|global\/(?:AGENTS|CLAUDE)\.md|skills\/manifest\.json|hooks\/custom\/[\w.-]+|scripts\/[\w.-]+\.(?:cjs|ps1)|docs\/[\w.-]+\.md|tests\/[\w.-]+\.cjs)$/.test(p)&&!/(?:^|\/)(?:auth\.json|\.env[^/]*|backups|cache|runtime|memory|sessions)(?:\/|$)/i.test(p);
 }
 function inspect(entries){
   const findings=[];

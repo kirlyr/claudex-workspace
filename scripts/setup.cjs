@@ -21,12 +21,18 @@ function target(home,rel){
   return file;
 }
 function options(input={}){
-  const home=path.resolve(input.home||process.env.CODEX_HOME||path.join(os.homedir(),'.codex'));
+  const agent=input.agent||'codex';if(!['codex','claude'].includes(agent))throw new Error('Unsupported agent');
+  const home=path.resolve(input.home||(agent==='codex'?process.env.CODEX_HOME:null)||path.join(os.homedir(),agent==='codex'?'.codex':'.claude'));
   if(home===path.parse(home).root)throw new Error('A filesystem root cannot be Codex home');
-  return{...input,home,packageRoot:path.resolve(input.packageRoot||packageRoot)};
+  return{...input,agent,home,packageRoot:path.resolve(input.packageRoot||packageRoot)};
 }
 function layout(input){
-  const o=options(input),manifest=readJson(path.join(o.packageRoot,'skills/manifest.json'));
+  const o=options(input);
+  if(o.agent==='claude'){
+    const bytes=fs.readFileSync(path.join(o.packageRoot,'global/CLAUDE.md'));
+    target(o.home,'CLAUDE.md');return{...o,desired:[{rel:'CLAUDE.md',hash:sha(bytes),bytes}]};
+  }
+  const manifest=readJson(path.join(o.packageRoot,'skills/manifest.json'));
   if(manifest.schemaVersion!==1||!Array.isArray(manifest.skills))throw new Error('Unsupported manifest');
   const bytes=fs.readFileSync(path.join(o.packageRoot,'global/AGENTS.md'));
   const desired=[{rel:'AGENTS.md',hash:sha(bytes),bytes}];const names=new Set();
@@ -75,6 +81,7 @@ async function install(input={}){
   const override=target(o.home,'AGENTS.override.md');
   if(fs.existsSync(override)&&fs.readFileSync(override,'utf8').trim())throw new Error('Global AGENTS.override.md requires review');
   const previous=fs.existsSync(paths.state)?readJson(paths.state):null;
+  if(previous&&(previous.agent||'codex')!==o.agent)throw new Error('Home already managed for a different agent');
   const oldDesired=new Map((previous?.desired||[]).map(d=>[d.rel,d.hash]));
   const changes=[];
   for(const item of o.desired){
@@ -88,7 +95,7 @@ async function install(input={}){
   const desiredKeys=new Set(o.desired.map(d=>d.rel));
   for(const [rel,oldHash] of oldDesired){
     if(desiredKeys.has(rel))continue;
-    if(rel!=='AGENTS.md'&&!/^skills\/[a-z0-9-]+\//.test(rel))throw new Error('Unsafe previous managed destination');
+    if(!['AGENTS.md','CLAUDE.md'].includes(rel)&&!/^skills\/[a-z0-9-]+\//.test(rel))throw new Error('Unsafe previous managed destination');
     const before=digest(target(o.home,rel));if(before&&before!==oldHash)throw new Error('User-modified obsolete file: '+rel);
     if(before)changes.push({rel,beforeHash:before,afterHash:null,bytes:null});
   }
@@ -96,7 +103,7 @@ async function install(input={}){
   const id=crypto.randomUUID(),backupDir=target(o.home,'.codex-workspace/backups/'+id);
   fs.mkdirSync(backupDir,{recursive:true});
   const journal=path.join(backupDir,'journal.json');
-  const record={schemaVersion:1,home:o.home,status:'INSTALLING',journal,previousState:previous,desired:o.desired.map(d=>({rel:d.rel,hash:d.hash})),changes:[]};
+  const record={schemaVersion:1,agent:o.agent,home:o.home,status:'INSTALLING',journal,previousState:previous,desired:o.desired.map(d=>({rel:d.rel,hash:d.hash})),changes:[]};
   // Backup only the managed files we actually change. Never copy auth/config/session data.
   for(const [index,c] of changes.entries()){
     if(digest(target(o.home,c.rel))!==c.beforeHash)throw new Error('File modified during install preflight: '+c.rel);
@@ -123,11 +130,12 @@ function rollback(input={}){
   target(o.home,path.relative(o.home,journal).split(path.sep).join('/'));
   const record=readJson(journal);
   if(record.home!==o.home||record.schemaVersion!==1)throw new Error('Journal home mismatch');
+  if((record.agent||'codex')!==o.agent)throw new Error('Journal agent mismatch');
   if(record.status==='ROLLED_BACK')return{status:'ROLLED_BACK',unchanged:true};
   if(fs.existsSync(paths.state)&&readJson(paths.state).journal!==journal&&record.status!=='FAILED')throw new Error('Rollback journal superseded by a later installation');
   const backupDir=path.dirname(journal);
   for(const c of record.changes){
-    if(c.rel!=='AGENTS.md'&&!/^skills\/[a-z0-9-]+\//.test(c.rel))throw new Error('Unsafe rollback path');
+    if(!['AGENTS.md','CLAUDE.md'].includes(c.rel)&&!/^skills\/[a-z0-9-]+\//.test(c.rel))throw new Error('Unsafe rollback path');
     const current=digest(target(o.home,c.rel));
     if(current!==c.afterHash&&current!==c.beforeHash)throw new Error('User-modified rollback conflict: '+c.rel);
     if(c.beforeHash){relative(c.backup);if(digest(target(backupDir,c.backup))!==c.beforeHash)throw new Error('Backup hash mismatch');}
@@ -144,8 +152,8 @@ function rollback(input={}){
 module.exports={install,verify,rollback};
 if(require.main===module){
   const [command,...args]=process.argv.slice(2);const opts={};
-  const flags={'--home':'home','--source-root':'sourceRoot','--journal':'journal'};
-  for(let i=0;i<args.length;i+=2){if(!flags[args[i]]||!args[i+1])throw new Error('Usage: setup.cjs install|verify|rollback [--home PATH] [--source-root PATH] [--journal PATH]');opts[flags[args[i]]]=args[i+1];}
+  const flags={'--home':'home','--source-root':'sourceRoot','--journal':'journal','--agent':'agent'};
+  for(let i=0;i<args.length;i+=2){if(!flags[args[i]]||!args[i+1])throw new Error('Usage: setup.cjs install|verify|rollback [--agent codex|claude] [--home PATH] [--source-root PATH] [--journal PATH]');opts[flags[args[i]]]=args[i+1];}
   const fn={install,verify,rollback}[command];
   if(!fn){console.error('Expected install, verify, or rollback');process.exitCode=1;}
   else Promise.resolve().then(()=>fn(opts)).then(result=>{console.log(JSON.stringify(result,null,2));if(command==='verify'&&!result.filesMatch)process.exitCode=2;}).catch(e=>{console.error(e.message);process.exitCode=1;});
