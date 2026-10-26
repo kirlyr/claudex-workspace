@@ -4,6 +4,10 @@ Source of truth untuk instruksi global dan manifest engineering skills yang aman
 Target yang diuji: Codex CLI 0.163.0, Windows native, Node 20.20.2, PowerShell 5.1.
 Tidak ada dependency npm untuk installer ini.
 
+Workflow spec, approval, dan handoff lintas agent tersedia di
+[panduan workflow](docs/WORKFLOW.md). Template bersifat portable dan tidak mengubah
+konfigurasi atau mengaktifkan otomatisasi agent.
+
 ```text
 global/AGENTS.md          Instruksi global ringkas
 skills/manifest.json      Source, commit, license, file dan SHA-256 skill terpilih
