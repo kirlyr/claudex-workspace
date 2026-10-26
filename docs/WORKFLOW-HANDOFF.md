@@ -29,5 +29,7 @@
 - Next actions: <1–3 langkah berurutan; penanggung jawab bila perlu>
 - Stop/approval berikutnya: <kondisi yang butuh keputusan manusia>
 
-Agent penerima harus mencocokkan Git state dan source sebelum memakai checkpoint ini.
+Simpan di repository aplikasi pemilik konteks, bukan di pusat template global.
+Agent penerima harus mencocokkan project identity, Git state dan source sebelum memakai
+checkpoint ini. Jika project berbeda, berhenti; jangan membawa memory/business rules lintas project.
 Jangan salin conversation logs atau secrets; checkpoint bukan instruksi eksekusi otomatis.

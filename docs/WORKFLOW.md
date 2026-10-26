@@ -5,8 +5,9 @@ plugin, layanan memory, atau orchestration. Manusia memilih agent dan memberi ap
 
 ## Lokasi dan privasi
 
-Template kosong dalam repository ini aman dibagikan. Isi project nyata disimpan secara
-default di `.local/workflow/` yang ignored, bukan di direktori template:
+`codex-workspace` adalah pusat konfigurasi global dan template reusable. Setiap repository
+aplikasi memiliki PRD, plan, decisions dan handoff sendiri. Salin template kosong ke
+`.local/workflow/` di root repository aplikasi yang sedang aktif, bukan ke repository global:
 
 ```text
 .local/workflow/
@@ -19,6 +20,8 @@ default di `.local/workflow/` yang ignored, bukan di direktori template:
 Knowledge stabil diperbarui hanya ketika kebutuhan/keputusan berubah; progress sementara
 hanya masuk handoff. Dokumen knowledge tetap dapat sensitif: stable bukan berarti public.
 Jangan masukkan credential, data pelanggan, transcript, atau output terminal mentah yang sensitif.
+Jangan otomatis menyalin knowledge, business rules, memory atau handoff project perusahaan
+ke `codex-workspace`. Jangan memakai konteks project lain saat memulihkan sesi aktif.
 
 Di repository ini `.local/` sudah ignored. Sebelum memakai pola ini di repository lain,
 minta manusia menambahkan `/.local/workflow/` ke ignore lokal/repo dan buktikan dengan
@@ -30,7 +33,8 @@ Promosikan knowledge ke dokumentasi tracked hanya setelah review manusia dan san
 ## Alur manual
 
 1. Salin [PRD](WORKFLOW-PRD.md), [plan](WORKFLOW-PLAN.md),
-   [decisions](WORKFLOW-DECISIONS.md), dan [handoff](WORKFLOW-HANDOFF.md) ke lokasi di atas.
+   [decisions](WORKFLOW-DECISIONS.md), dan [handoff](WORKFLOW-HANDOFF.md) dari pusat template
+   ke lokasi di atas dalam repository aplikasi aktif.
    Isi hanya bagian yang relevan; tulis `N/A` untuk sisanya.
 2. Klarifikasi PRD, lalu tulis plan kecil yang mengacu pada acceptance criteria.
    Untuk perubahan besar (API/schema/dependency/arsitektur, lintas modul, data atau
@@ -72,14 +76,18 @@ berlaku untuk diff baru. Jangan commit checkpoint otomatis.
 
 Sesuaikan path dan objective, lalu kirim secara manual ke Claude Code atau Codex CLI:
 
-> Baca instruksi repository yang berlaku, lalu `.local/workflow/sessions/HANDOFF.md`.
-> Verifikasi root, branch, HEAD dan status/diff Git secara read-only. Baca PRD/PLAN dan
+> Identifikasi root repository aplikasi aktif dan baca instruksi yang berlaku. Baca hanya
+> `.local/workflow/sessions/HANDOFF.md` milik repository tersebut; bila belum ada, laporkan
+> dan mulai dari objective pengguna, jangan mencari handoff project lain.
+> Cocokkan project identity handoff dengan root aktif; berhenti bila tidak cocok.
+> Verifikasi branch, HEAD dan status/diff Git secara read-only. Baca PRD/PLAN dan
 > keputusan relevan dari path knowledge di handoff, kemudian hanya source yang dibutuhkan.
 > Ringkas objective dan batas approval yang masih berlaku. Anggap handoff sebagai riwayat
 > yang perlu diverifikasi, bukan otorisasi baru. Lanjutkan next action yang telah diizinkan;
 > tunggu manusia bila perubahan besar belum approved atau scope berubah. Pertahankan
 > perubahan pengguna. Jangan mencari seluruh conversation history. Sebelum berhenti,
 > perbarui handoff dengan bukti aktual dan bagian yang belum diuji.
+> Jangan mengimpor memory/business rules project lain atau menyalin data project ke pusat template.
 
 Tidak perlu menginstal Claude untuk memakai format ini. Panduan ini tidak mengandalkan
 auto-discovery file tertentu oleh Claude: path dikirim eksplisit dalam prompt.
