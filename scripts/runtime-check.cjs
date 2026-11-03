@@ -10,9 +10,9 @@ const home=path.resolve(flags['--home']);
 if(!verify({home}).filesMatch)throw new Error('Install matching file hashes before runtime verification');
 const cwd=path.join(root,'.local/runtime-project');fs.mkdirSync(cwd,{recursive:true});
 fs.writeFileSync(path.join(cwd,'AGENTS.override.md'),'SYNTHETIC_PROJECT_OVERRIDE: use the local fixture only.\n');
-const expected=['systematic-debugging','test-driven-development','verification-before-completion','database-migration'];
+const expected=['systematic-debugging','test-driven-development','verification-before-completion','database-migration','frontend-design'];
 const result={mode:'native Codex with localhost mock; no inference',discovery:false,instructionLoading:false,explicitInvocation:false,modelBehaviorTested:false};
-const markers=['NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST','NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST','NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE','Master database schema and data migrations across ORMs'];
+const markers=['NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST','NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST','NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE','Master database schema and data migrations across ORMs','Approach this as the design lead at a design studio'];
 const server=http.createServer((req,res)=>{
   let body='';req.on('data',b=>body+=b);req.on('end',()=>{
     if(req.url!=='/v1/responses'){res.writeHead(404).end();return;}

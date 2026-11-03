@@ -9,7 +9,7 @@ installer. Stack dan aturan bisnis spesifik tetap berada di AGENTS.md tiap proje
 | Lokasi | Pemilik dan kebijakan |
 |---|---|
 | global/AGENTS.md | Source yang di-review melalui Git |
-| skills/manifest.json | Empat skill upstream, commit immutable dan hash setiap file |
+| skills/manifest.json | Empat engineering skills dan Frontend Design, commit immutable dan hash setiap file |
 | CODEX_HOME/AGENTS.md | Salinan source dengan backup sebelum perubahan |
 | CODEX_HOME/skills/nama | Bundle lengkap + LICENSE + provenance |
 | CODEX_HOME/.codex-workspace | State/backup lokal; tidak pernah masuk Git |

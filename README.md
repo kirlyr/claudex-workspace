@@ -1,6 +1,6 @@
 # Codex workspace
 
-Source of truth untuk instruksi global dan manifest engineering skills yang aman dibagikan.
+Source of truth untuk instruksi global dan manifest skills terpilih yang aman dibagikan.
 Target yang diuji: Codex CLI 0.163.0, Windows native, Node 20.20.2, PowerShell 5.1.
 Tidak ada dependency npm untuk installer ini.
 
@@ -24,6 +24,16 @@ systematic-debugging, test-driven-development, verification-before-completion;
 wshobson/agents hanya database-migration. Tidak ada bootstrap hook Superpowers.
 Isi skill diambil dari commit yang dipin beserta references/scripts dan LICENSE, lalu
 diverifikasi hash-nya. Installer tidak mengeksekusi script upstream.
+
+Frontend Design resmi Anthropic juga dikelola manifest dari
+[`anthropics/skills`, commit `ca45fc496a3436251f191354091d557da31c15b5`](https://github.com/anthropics/skills/tree/ca45fc496a3436251f191354091d557da31c15b5/skills/frontend-design).
+Versi memakai `git:<commit>` karena skill tidak mendeklarasikan versi tersendiri.
+Bundle hanya berisi `SKILL.md` asli dan lisensi Apache-2.0 asli: `LICENSE.txt` tetap
+tersedia untuk rujukan skill, dengan salinan identik `LICENSE` sesuai kontrak installer.
+Tidak ada dependency tambahan. Gunakan `$frontend-design` secara manual, misalnya
+`Gunakan $frontend-design untuk merancang UI halaman kartu akses` di project mana pun.
+Codex dapat memilihnya berdasarkan deskripsi untuk tugas UI/UX; tugas non-UI tidak perlu
+memuatnya. Instalasi ini tidak mengubah hooks, Ponytail, approval, atau workflow existing.
 
 ## Install dan verifikasi
 

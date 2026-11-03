@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-03 — Anthropic Frontend Design
+
+- Menambahkan satu skill `frontend-design` dari `anthropics/skills`, snapshot Git
+  `ca45fc496a3436251f191354091d557da31c15b5`, dengan SHA-256 setiap file.
+- Mempertahankan source dan lisensi Apache-2.0 asli, termasuk `LICENSE.txt` dan salinan
+  identik `LICENSE` untuk installer existing; tidak mengubah installer atau hooks.
+- Menambahkan pemeriksaan discovery dan explicit invocation pada runtime check existing;
+  mock localhost tidak membuktikan kualitas desain atau pemilihan skill oleh model.
+- Mendokumentasikan pemakaian untuk UI/UX tanpa mengubah Ponytail dan workflow non-UI.
+
 ## 2026-10-23 — Git tracking and history review
 
 - Memindai seluruh 182 file pada commit awal tanpa mengeluarkan nilai sensitif.

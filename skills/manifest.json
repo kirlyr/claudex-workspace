@@ -141,6 +141,31 @@
           "sha256": "f89abb55d9f073f38f1703e4518f0613c788c6174be7f13b8dfe48a1c076c746"
         }
       ]
+    },
+    {
+      "name": "frontend-design",
+      "repository": "anthropics/skills",
+      "commit": "ca45fc496a3436251f191354091d557da31c15b5",
+      "version": "git:ca45fc496a3436251f191354091d557da31c15b5",
+      "license": "Apache-2.0",
+      "path": "skills/frontend-design",
+      "files": [
+        {
+          "source": "skills/frontend-design/SKILL.md",
+          "destination": "SKILL.md",
+          "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+        },
+        {
+          "source": "skills/frontend-design/LICENSE.txt",
+          "destination": "LICENSE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "source": "skills/frontend-design/LICENSE.txt",
+          "destination": "LICENSE.txt",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        }
+      ]
     }
   ],
   "preservedPlugins": [
