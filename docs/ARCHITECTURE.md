@@ -1,16 +1,17 @@
 # Architecture
 
 Repository ini menyimpan instruksi dan metadata instalasi, bukan salinan plugin cache.
-`global/AGENTS.md` adalah satu-satunya sumber global instructions yang dipasang oleh
-installer. Stack dan aturan bisnis spesifik tetap berada di AGENTS.md tiap project.
+`global/AGENTS.md` (Codex) dan `global/CLAUDE.md` (Claude, opt-in `--agent claude`) adalah
+sumber global instructions yang dipasang oleh installer. Stack dan aturan bisnis spesifik tetap berada di AGENTS.md tiap project.
 
 ## Ownership
 
 | Lokasi | Pemilik dan kebijakan |
 |---|---|
 | global/AGENTS.md | Source yang di-review melalui Git |
-| skills/manifest.json | Empat engineering skills dan Frontend Design, commit immutable dan hash setiap file |
-| CODEX_HOME/AGENTS.md | Salinan source dengan backup sebelum perubahan |
+| global/CLAUDE.md | Source instruksi Claude; hanya dipasang dengan `--agent claude` |
+| skills/manifest.json | Lima skill (empat engineering, satu Frontend Design), commit immutable dan hash setiap file |
+| CODEX_HOME/AGENTS.md, ~/.claude/CLAUDE.md | Salinan source dengan backup; file existing yang berbeda ditolak kecuali `--adopt` |
 | CODEX_HOME/skills/nama | Bundle lengkap + LICENSE + provenance |
 | CODEX_HOME/.codex-workspace | State/backup lokal; tidak pernah masuk Git |
 | Ponytail/plugin cache | Dikelola plugin; installer tidak menyentuhnya |
