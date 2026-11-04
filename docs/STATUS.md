@@ -1,51 +1,51 @@
-# Status implementasi
+# Status
 
-Tanggal: 23 Oktober 2026. Status ini tidak menganggap file source sebagai instalasi aktif.
+Diperbarui: 4 November 2026. Tabel ini hanya memuat apa yang dibuktikan repo ini; instalasi pada
+home pengguna tidak dapat dibuktikan dari sini.
 
 | Komponen | Status | Bukti/batas |
 |---|---|---|
-| Ponytail 5.3.2 | ACTIVE_VERIFIED | Existing tetap aktif; trust tercatat; tidak dimodifikasi |
-| Global AGENTS baru | BLOCKED | Gagal membuat backup di Codex home: EPERM |
-| Engineering skills baru | NOT_INSTALLED | Empat bundle terpilih belum terpasang pada home pengguna |
-| Automated tests | VERIFIED_SYNTHETIC | 12 test installer, rollback dan scanner lulus; bukan status global |
-| Native discovery/invocation | VERIFIED_SYNTHETIC | Empat skill sekali masing-masing, global instructions dan project override dimuat, tanpa hook warnings |
-| Claude-Mem | BLOCKED | Belum diinstal; worker/recovery belum diuji |
-| Git tracking/index | CLEANED | 182 file legacy dikeluarkan dari tracking; file fisik dipertahankan |
-| Git commit/push baru | BLOCKED | Metadata pribadi/lokal ditemukan pada history commit awal |
+| Source portable (`global/`, `skills/manifest.json`, `scripts/`) | Ada di `main` | 5 skill dipin per commit + SHA-256 |
+| Automated tests | VERIFIED_SYNTHETIC | `node --test "tests/*.test.cjs"`: 24 test, home dan jaringan sintetis |
+| Pemeriksaan publikasi | Lulus | `check-public.cjs working` dan `index`; `audit-history.cjs HEAD` |
+| Instalasi pada `~/.codex` / `~/.claude` | Tidak dibuktikan di sini | Jalankan `node scripts/setup.cjs verify [--agent claude]` pada mesin target |
+| Discovery/invocation native | VERIFIED_SYNTHETIC (fase lama) | Via `runtime-check.cjs` dan mock localhost; tidak dijalankan ulang |
+| Alur bergantian Claude ↔ Codex | Belum diuji | Lihat verifikasi manual di [WORKFLOW.md](WORKFLOW.md) |
+| Claude-Mem | Belum aktif | [Dokumen pilot](CLAUDE-MEM-PILOT.md) |
 
-Source publik tersedia pada working tree. Tidak ada perubahan pada repository aplikasi,
-production database, deployment atau credential. Tidak ada hook tambahan diaktifkan.
+Pengujian inference nyata, pemilihan skill otomatis oleh model dan wrapper PowerShell
+(`*.ps1`) belum diuji. Engine yang diuji adalah Node (v22 saat tes terakhir).
 
-## Git yang ditemukan
+## Insiden: metadata pribadi di commit awal
 
-Repository existing memakai branch main dengan origin kirlyr/codex-workspace dan commit
-awal `c040c5bc22aeda78bdf7f60e4a829c5364095df4`. Reflog origin/main menunjukkan update by push.
-Tidak ada reinitialization, history rewrite, force push, reset, stash atau clean.
+**Terbuka — menunggu keputusan pemilik repo.**
 
-Pada tugas Git terbaru, percobaan sandbox awal ditolak tetapi mekanisme permission resmi
-berhasil. Semua 182 entry legacy dikeluarkan dari index tanpa menghapus file fisik;
-hash sebelum/sesudah seluruh file tersebut cocok. Source dan test lama tetap lokal.
+- Commit awal `c040c5bc22aeda78bdf7f60e4a829c5364095df4` berisi metadata pribadi/lokal pada
+  25 file di `codex-global-setup/` (path profil, layout project, konfigurasi trust project).
+  Scanner pola tidak menemukan kandidat credential; itu bukan bukti bahwa tidak ada secret.
+- History `main` kemudian ditulis ulang menjadi 5 commit bersih. Commit lama tidak lagi
+  terjangkau dari `main`, tetapi GitHub bisa tetap melayaninya lewat SHA langsung. Cek
+  sendiri: buka `https://github.com/kirlyr/claudex-workspace/commit/c040c5bc22aeda78bdf7f60e4a829c5364095df4`
+  dalam keadaan logout. Jika terbuka, metadata itu masih publik.
+- Jangan force-push lagi sebagai solusi: itu tidak menghapus commit lama dari GitHub.
 
-Audit seluruh 182 file commit awal menemukan 25 file dengan metadata pribadi/lokal,
-termasuk konfigurasi trust project. Tidak ada kandidat credential dari pola scanner yang
-tersedia, tetapi hasil itu tidak membuktikan history aman dari semua jenis secret.
-Tidak ada commit baru/push karena syarat keamanan history belum terpenuhi. Index yang
-bersih tidak menghapus data pada commit lama. Detail: [HISTORY-REVIEW.md](HISTORY-REVIEW.md).
+Pilihan (pilih salah satu secara eksplisit):
 
-Remote sudah HTTPS sesuai instruksi pengguna. GCM tersedia menurut environment yang
-diberikan pengguna; tidak ada GitHub CLI. Login dan push tidak dicoba pada tugas Git ini
-karena gate keamanan history sudah menghentikan publikasi. Tidak ada credential diubah.
+1. **Terima risiko**, jika setelah membaca 25 file itu isinya hanya path/nama lokal. Catat keputusan di sini.
+2. **Minta GitHub Support** menghapus commit yang tidak terjangkau tersebut.
+3. **Hapus dan buat ulang repository** dari history bersih saat ini. Biayanya kecil karena baru 5 commit.
 
-## Langkah berikutnya yang benar-benar diperlukan
+Setelah memilih opsi 2 atau 3, jalankan `git gc --prune=now` pada clone lokal. Bila ternyata ada
+credential nyata, revoke/rotate credential itu; tidak ada yang terkonfirmasi sejauh ini.
 
-1. Review temuan history dan pilih remediasi yang secara eksplisit disetujui. History rewrite
-   atau perubahan branch remote yang tidak fast-forward belum diotorisasi dan tidak dilakukan.
-2. Sesudah remediation, scan kembali history dan staged blobs serta jalankan automated tests.
-3. Hanya bila kedua gate keamanan lulus, buat commit conventional lalu push normal origin/main
-   melalui Git HTTPS dan credential manager. Jangan menyisipkan token pada URL.
+## Pemeriksaan ulang
 
-Tugas ini tidak mengulang instalasi skills atau mengubah konfigurasi global Codex. Status
-global dan native invocation di atas berasal dari fase sebelumnya, bukan aktivasi baru.
+```bash
+node scripts/audit-history.cjs HEAD      # scan tree commit; laporan lokal di .local/ (jangan di-commit)
+node scripts/check-public.cjs working
+node scripts/check-public.cjs index
+node --test "tests/*.test.cjs"
+```
 
-Pengujian inference nyata, automatic skill selection dan Claude-Mem session recovery belum
-dijalankan. Mock localhost hanya menguji protocol expansion, tanpa konsumsi token model.
+`audit-history.cjs` memindai satu tree commit (default `HEAD`), bukan seluruh history; jalankan
+dengan SHA lain untuk commit lain. Laporan hanya memuat kategori, path dan nomor baris.

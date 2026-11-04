@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-04 — Review hardening
+
+- Installer menolak `AGENTS.md` unmanaged yang berbeda seperti `CLAUDE.md`; `--adopt` eksplisit
+  mengganti file instruksi unmanaged dengan backup dan tidak melewati modifikasi pengguna.
+- Validasi repository upstream diperketat (`..` dan segmen `.` ditolak sebelum menyentuh `--source-root`).
+- `audit-history.cjs` default ke `HEAD`, menerima `HEAD` atau SHA, dan mencocokkan home sebagai
+  path utuh (tidak lagi menandai teks seperti `root-cause-tracing`).
+- Test baru: `--adopt`, validasi manifest, kegagalan install di tengah lalu rollback, penghapusan
+  file obsolete, download dengan fetch ter-stub (host, hash, ukuran, cache). Fixture dibersihkan.
+- `STATUS.md` dan `HISTORY-REVIEW.md` digabung menjadi satu catatan status dan insiden; nama
+  repository, jumlah test dan perintah test diperbarui.
+
 ## 2026-11-03 — Anthropic Frontend Design
 
 - Menambahkan satu skill `frontend-design` dari `anthropics/skills`, snapshot Git

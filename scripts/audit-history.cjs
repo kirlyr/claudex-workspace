@@ -2,6 +2,12 @@ const fs=require('node:fs');const path=require('node:path');const os=require('no
 const {spawnSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 const normalized=s=>s.replace(/[\\/]+/g,'/').toLowerCase();
+// True when `needle` occurs as a whole absolute-path prefix: neither neighbouring character may continue
+// a name (so a home of "/root" matches neither "skills/x/root-cause.md" nor "nama/root relatif").
+function hasPath(plain,needle){
+  for(let i=plain.indexOf(needle);i!==-1;i=plain.indexOf(needle,i+1)){const prev=plain[i-1],next=plain[i+needle.length];if((!prev||!/[a-z0-9_.-]/.test(prev))&&(!next||!/[a-z0-9_.-]/.test(next)))return true;}
+  return false;
+}
 function analyzeText(text,{home=os.homedir(),workspaceParent=path.dirname(root)}={}){
   const found=new Map();
   function add(category,line,severity='sensitive_metadata'){
@@ -15,7 +21,7 @@ function analyzeText(text,{home=os.homedir(),workspaceParent=path.dirname(root)}
     const assignment=/\b(?:[\w]*_)?(?:password|passwd|client_secret|api_key|access_token|refresh_token)\b\s*[:=]\s*["']([^"'\r\n]{8,})["']/ig;
     for(const match of line.matchAll(assignment))if(!/^(?:\$\{|process\.env|<|redacted|fake_|synthetic|example|test[-_])/i.test(match[1]))add('credential_assignment',n,'candidate_credential');
     if(/\b(?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql|https?):\/\/[^\s/:<>$]+:[^\s/@<>${}]+@/i.test(line))add('credential_in_uri',n,'candidate_credential');
-    if(home&&plain.includes(normalized(home)))add('local_profile_metadata',n);
+    if(home&&hasPath(plain,normalized(home)))add('local_profile_metadata',n);
     if(workspaceParent&&plain.includes(normalized(workspaceParent)+'/'))add('local_workspace_metadata',n);
     if(/^\s*\[projects\./i.test(line))add('project_trust_metadata',n);
   });
@@ -26,7 +32,7 @@ function git(args,input){
   if(r.status!==0)throw new Error('Read-only Git history operation failed: '+args[0]);return r.stdout;
 }
 function audit(ref){
-  if(!/^[a-f0-9]{7,40}$/i.test(ref))throw new Error('Specify an explicit commit SHA');
+  if(ref!=='HEAD'&&!/^[a-f0-9]{7,40}$/i.test(ref))throw new Error('Specify HEAD or an explicit commit SHA');
   const commit=git(['rev-parse','--verify',ref+'^{commit}']).toString().trim();
   const rows=git(['ls-tree','-rz','--full-tree',commit]).toString('utf8').split('\0').filter(Boolean).map(row=>{
     const tab=row.indexOf('\t');const [mode,type,blob]=row.slice(0,tab).split(' ');
@@ -63,7 +69,7 @@ function audit(ref){
 }
 module.exports={analyzeText,audit};
 if(require.main===module){
-  const r=audit(process.argv[2]||'c040c5b');
+  const r=audit(process.argv[2]||'HEAD');
   console.log(JSON.stringify({commit:r.commit,filesScanned:r.filesScanned,uniqueBlobs:r.uniqueBlobs,bytesScanned:r.bytesScanned,skippedFiles:r.skippedFiles,credentialCandidateFiles:r.credentialCandidateFiles,sensitiveMetadataFiles:r.sensitiveMetadataFiles,safeToPush:r.safeToPush,upstream:r.upstream,report:'.local/history-security-report.json'},null,2));
   if(!r.safeToPush)process.exitCode=2;
 }

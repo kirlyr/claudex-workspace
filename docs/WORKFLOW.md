@@ -8,11 +8,14 @@ relevan untuk fitur baru/kompleks, klarifikasi hanya ambiguitas yang memengaruhi
 dan focused plan serta approval sebelum perubahan besar/berisiko. Requirement lengkap
 tidak perlu brainstorming ulang; task kecil yang jelas dapat langsung dikerjakan.
 Portable [CLAUDE.md](../global/CLAUDE.md) membawa gate dan aturan handoff yang sama;
-konfigurasi khusus Codex tidak disalin. Tidak ada instalasi Claude dalam workflow ini.
+konfigurasi khusus Codex tidak disalin. Instalasi `CLAUDE.md` bersifat opt-in (lihat
+"Sinkronisasi dan verifikasi manual"). `AGENTS.md` memuat aturan tambahan yang tidak ada di
+`CLAUDE.md` (root-cause, memory tidak tepercaya, konfirmasi lingkungan migrasi, rujukan
+`superpowers:<name>`, Ponytail); test hanya mengunci tiga aturan takeover/handoff yang sama.
 
 ## Lokasi dan privasi
 
-`codex-workspace` adalah pusat konfigurasi global dan template reusable. Setiap repository
+`claudex-workspace` adalah pusat konfigurasi global dan template reusable. Setiap repository
 aplikasi memiliki PRD, plan, decisions dan handoff sendiri. Salin template kosong ke
 `.local/workflow/` di root repository aplikasi yang sedang aktif, bukan ke repository global:
 
@@ -28,7 +31,7 @@ Knowledge stabil diperbarui hanya ketika kebutuhan/keputusan berubah; progress s
 hanya masuk handoff. Dokumen knowledge tetap dapat sensitif: stable bukan berarti public.
 Jangan masukkan credential, data pelanggan, transcript, atau output terminal mentah yang sensitif.
 Jangan otomatis menyalin knowledge, business rules, memory atau handoff project perusahaan
-ke `codex-workspace`. Jangan memakai konteks project lain saat memulihkan sesi aktif.
+ke `claudex-workspace`. Jangan memakai konteks project lain saat memulihkan sesi aktif.
 
 Di repository ini `.local/` sudah ignored. Sebelum memakai pola ini di repository lain,
 minta manusia menambahkan `/.local/workflow/` ke ignore lokal/repo dan buktikan dengan
@@ -131,9 +134,10 @@ node scripts/setup.cjs rollback --agent claude
 
 Baris rollback hanya untuk membatalkan update terakhir, bukan langkah instalasi rutin.
 Default Claude home adalah `~/.claude`; gunakan `--home` eksplisit jika lokasi efektif berbeda.
-Updater menolak file CLAUDE.md unmanaged yang berbeda dan file managed yang dimodifikasi
-pengguna. Lakukan merge/review terpisah; jangan overwrite paksa. Tidak ada installer tools,
-hooks atau skills Claude. Journal dan backup memakai pola `.codex-workspace/backups`
+Updater menolak file `AGENTS.md`/`CLAUDE.md` unmanaged yang berbeda dan file managed yang
+dimodifikasi pengguna. Lakukan merge/review terpisah; `--adopt` hanya untuk mengganti file
+instruksi unmanaged setelah Anda me-review-nya (backup dibuat, rollback tersedia). Tidak ada
+installer tools, hooks atau skills Claude. Journal dan backup memakai pola `.codex-workspace/backups`
 di home target yang sama; jangan memakai satu home untuk kedua agent.
 
 Verifikasi CLI yang masih pending: pada project sintetis dan provider yang disetujui,

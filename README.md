@@ -1,7 +1,8 @@
-# Codex workspace
+# Claudex workspace
 
 Source of truth untuk instruksi global dan manifest skills terpilih yang aman dibagikan.
-Target yang diuji: Codex CLI 0.163.0, Windows native, Node 20.20.2, PowerShell 5.1.
+Target yang diuji untuk Codex: Codex CLI 0.163.0, Windows native, Node 20.20.2, PowerShell 5.1.
+Instalasi Claude (`--agent claude`) hanya memasang `global/CLAUDE.md`; versi Claude Code belum dicatat.
 Tidak ada dependency npm untuk installer ini.
 
 Workflow spec, approval, dan handoff lintas agent tersedia di
@@ -66,7 +67,9 @@ untuk pengujian awal. Trust hook tidak pernah dilewati.
 Installer menyimpan journal dan backup hanya file yang diubah di
 `<CODEX_HOME>/.codex-workspace/backups`. Tidak menyalin auth.json, config.toml, secrets,
 sessions atau database memory. Perubahan skill pengguna dan override global menghentikan
-instalasi. Instalasi ulang dengan isi yang sama tidak mengubah file atau backup.
+instalasi. `AGENTS.md`/`CLAUDE.md` global existing yang berbeda dan belum dikelola installer
+juga menghentikan instalasi; review dulu, lalu ulangi dengan `--adopt` (backup tetap dibuat
+dan dapat di-rollback). `--adopt` tidak melewati perubahan pengguna pada file yang sudah dikelola. Instalasi ulang dengan isi yang sama tidak mengubah file atau backup.
 
 ```powershell
 node scripts/setup.cjs rollback
@@ -80,9 +83,10 @@ dan dependency upstream, perbarui manifest/hash secara sengaja, lalu ulangi selu
 ## Test dan publish
 
 ```powershell
-node --test tests/setup.test.cjs tests/public.test.cjs
+node --test "tests/*.test.cjs"
 node scripts/check-public.cjs working
 node scripts/check-public.cjs index
+node scripts/audit-history.cjs HEAD
 git diff --cached --check
 ```
 
@@ -91,10 +95,7 @@ Jangan commit backups, .local, artefak audit lama, runtime, plugin cache, transc
 memory, database atau source repository aplikasi. Scanner adalah pemeriksaan tambahan,
 bukan jaminan bahwa semua bentuk rahasia terdeteksi.
 
-**Status saat ini:** folder audit legacy sudah dikeluarkan dari tracking sambil mempertahankan
-file lokal. Source portable dan perubahan tracking disiapkan pada index. Push/commit baru
-ditahan karena review menemukan metadata pribadi/lokal pada 25 file dalam commit awal;
-untracking tidak membersihkan history. Lihat [review history](docs/HISTORY-REVIEW.md) dan
-[status aktual](docs/STATUS.md) sebelum publikasi. Tidak ada instalasi global dalam tugas Git ini.
+**Status saat ini:** lihat [STATUS.md](docs/STATUS.md). Ada satu keputusan terbuka tentang metadata
+pribadi di commit awal yang mungkin masih dapat diakses lewat SHA; baca sebelum menganggap repo ini aman dipublikasikan.
 
 Claude-Mem belum aktif. Batas pilot dijelaskan dalam [dokumen pilot](docs/CLAUDE-MEM-PILOT.md).
