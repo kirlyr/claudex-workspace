@@ -12,6 +12,8 @@ function relative(value){
   if(typeof value!=='string'||!value||path.isAbsolute(value)||value.includes('\\')||value.includes(':')||value.split('/').some(p=>!p||p==='.'||p==='..')||/[\0-\x1f]/.test(value))throw new Error('Unsafe relative path: '+value);
   return value;
 }
+// owner/name with GitHub-safe characters; '.' and '..' segments would escape --source-root.
+const validRepository=r=>typeof r==='string'&&/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r)&&r.split('/').every(part=>part!=='.'&&part!=='..');
 function target(home,rel){
   relative(rel);const file=path.resolve(home,rel);
   if(!file.startsWith(home+path.sep))throw new Error('Destination escaped home');
@@ -38,7 +40,7 @@ function layout(input){
   const desired=[{rel:'AGENTS.md',hash:sha(bytes),bytes}];const names=new Set();
   for(const skill of manifest.skills){
     if(!/^[a-z0-9-]+$/.test(skill.name)||names.has(skill.name))throw new Error('Invalid or duplicate skill name');names.add(skill.name);
-    if(!/^[\w.-]+\/[\w.-]+$/.test(skill.repository)||!/^[a-f0-9]{40}$/.test(skill.commit))throw new Error('Unpinned upstream');
+    if(!validRepository(skill.repository)||!/^[a-f0-9]{40}$/.test(skill.commit))throw new Error('Invalid upstream repository or unpinned commit');
     const destinations=new Set();
     for(const f of skill.files){
       relative(f.source);relative(f.destination);
@@ -87,8 +89,9 @@ async function install(input={}){
   for(const item of o.desired){
     const file=target(o.home,item.rel),before=digest(file);
     if(before!==item.hash){
-      if(before&&item.rel!=='AGENTS.md'&&before!==oldDesired.get(item.rel))throw new Error('User-modified file or unmanaged skill conflict: '+item.rel);
-      if(before&&oldDesired.has(item.rel)&&before!==oldDesired.get(item.rel))throw new Error('User-modified managed file: '+item.rel);
+      // Only an unmanaged global instruction file may be replaced, and only with explicit --adopt (backup is kept).
+      const adoptable=o.adopt&&['AGENTS.md','CLAUDE.md'].includes(item.rel)&&!oldDesired.has(item.rel);
+      if(before&&before!==oldDesired.get(item.rel)&&!adoptable)throw new Error('Unmanaged or user-modified file conflict: '+item.rel+(['AGENTS.md','CLAUDE.md'].includes(item.rel)&&!oldDesired.has(item.rel)?' (review it, then use --adopt to replace it; a backup is kept)':''));
       changes.push({rel:item.rel,beforeHash:before,afterHash:item.hash,bytes:await materialize(o,item)});
     }
   }
@@ -153,7 +156,12 @@ module.exports={install,verify,rollback};
 if(require.main===module){
   const [command,...args]=process.argv.slice(2);const opts={};
   const flags={'--home':'home','--source-root':'sourceRoot','--journal':'journal','--agent':'agent'};
-  for(let i=0;i<args.length;i+=2){if(!flags[args[i]]||!args[i+1])throw new Error('Usage: setup.cjs install|verify|rollback [--agent codex|claude] [--home PATH] [--source-root PATH] [--journal PATH]');opts[flags[args[i]]]=args[i+1];}
+  const usage='Usage: setup.cjs install|verify|rollback [--agent codex|claude] [--home PATH] [--source-root PATH] [--journal PATH] [--adopt]';
+  for(let i=0;i<args.length;){
+    if(args[i]==='--adopt'){opts.adopt=true;i+=1;continue;}
+    if(!flags[args[i]]||!args[i+1])throw new Error(usage);
+    opts[flags[args[i]]]=args[i+1];i+=2;
+  }
   const fn={install,verify,rollback}[command];
   if(!fn){console.error('Expected install, verify, or rollback');process.exitCode=1;}
   else Promise.resolve().then(()=>fn(opts)).then(result=>{console.log(JSON.stringify(result,null,2));if(command==='verify'&&!result.filesMatch)process.exitCode=2;}).catch(e=>{console.error(e.message);process.exitCode=1;});
