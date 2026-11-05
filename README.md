@@ -47,7 +47,8 @@ node scripts/runtime-check.cjs --home "$env:USERPROFILE\.codex"
 ```
 
 `CODEX_HOME` dihormati; default memakai home pengguna. `--home PATH` dapat memilih home
-sintetis atau lokasi yang sudah disetujui. `--source-root PATH` dapat memakai checkout
+sintetis atau lokasi yang sudah disetujui; folder itu harus sudah ada (buat dulu, misalnya
+`mkdir .local\trial-home`). `node --test` tanpa argumen dipakai karena Node 20 belum mendukung glob. `--source-root PATH` dapat memakai checkout
 upstream lokal dengan susunan `<repo-basename>/<source-path>`; hash tetap diperiksa.
 Tanpa source lokal, installer hanya mengambil file HTTPS dari raw.githubusercontent.com
 pada commit manifest. Cache download berada di `.local/cache` dan tidak boleh di-commit.
@@ -83,7 +84,7 @@ dan dependency upstream, perbarui manifest/hash secara sengaja, lalu ulangi selu
 ## Test dan publish
 
 ```powershell
-node --test "tests/*.test.cjs"
+node --test
 node scripts/check-public.cjs working
 node scripts/check-public.cjs index
 node scripts/audit-history.cjs HEAD

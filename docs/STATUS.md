@@ -6,7 +6,7 @@ home pengguna tidak dapat dibuktikan dari sini.
 | Komponen | Status | Bukti/batas |
 |---|---|---|
 | Source portable (`global/`, `skills/manifest.json`, `scripts/`) | Ada di `main` | 5 skill dipin per commit + SHA-256 |
-| Automated tests | VERIFIED_SYNTHETIC | `node --test "tests/*.test.cjs"`: 24 test, home dan jaringan sintetis |
+| Automated tests | VERIFIED_SYNTHETIC | `node --test`: 24 test, home dan jaringan sintetis |
 | Pemeriksaan publikasi | Lulus | `check-public.cjs working` dan `index`; `audit-history.cjs HEAD` |
 | Instalasi pada `~/.codex` / `~/.claude` | Tidak dibuktikan di sini | Jalankan `node scripts/setup.cjs verify [--agent claude]` pada mesin target |
 | Discovery/invocation native | VERIFIED_SYNTHETIC (fase lama) | Via `runtime-check.cjs` dan mock localhost; tidak dijalankan ulang |
@@ -44,7 +44,7 @@ credential nyata, revoke/rotate credential itu; tidak ada yang terkonfirmasi sej
 node scripts/audit-history.cjs HEAD      # scan tree commit; laporan lokal di .local/ (jangan di-commit)
 node scripts/check-public.cjs working
 node scripts/check-public.cjs index
-node --test "tests/*.test.cjs"
+node --test
 ```
 
 `audit-history.cjs` memindai satu tree commit (default `HEAD`), bukan seluruh history; jalankan
