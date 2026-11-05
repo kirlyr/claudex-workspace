@@ -2,6 +2,8 @@
 
 Source of truth untuk instruksi global dan manifest skills terpilih yang aman dibagikan.
 Target yang diuji untuk Codex: Codex CLI 0.163.0, Windows native, Node 20.20.2, PowerShell 5.1.
+`runtime-check` juga lulus pada Codex CLI 0.166.0 di Windows (5 November 2026, dijalankan pengguna;
+versi Node/PowerShell pada run itu tidak dicatat).
 Instalasi Claude (`--agent claude`) hanya memasang `global/CLAUDE.md`; versi Claude Code belum dicatat.
 Tidak ada dependency npm untuk installer ini.
 

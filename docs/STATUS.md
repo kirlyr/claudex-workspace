@@ -9,7 +9,7 @@ home pengguna tidak dapat dibuktikan dari sini.
 | Automated tests | VERIFIED_SYNTHETIC | `node --test`: 24 test, home dan jaringan sintetis |
 | Pemeriksaan publikasi | Lulus | `check-public.cjs working` dan `index`; `audit-history.cjs HEAD` |
 | Instalasi pada `~/.codex` / `~/.claude` | Tidak dibuktikan di sini | Jalankan `node scripts/setup.cjs verify [--agent claude]` pada mesin target |
-| Discovery/invocation native | VERIFIED_SYNTHETIC (fase lama) | Via `runtime-check.cjs` dan mock localhost; tidak dijalankan ulang |
+| Discovery/invocation native | VERIFIED_SYNTHETIC | `runtime-check.cjs` + mock localhost lulus pada Codex CLI 0.166.0, Windows, 5 Nov 2026 (home sintetis, lima skill); tanpa inference model |
 | Alur bergantian Claude ↔ Codex | Belum diuji | Lihat verifikasi manual di [WORKFLOW.md](WORKFLOW.md) |
 | Claude-Mem | Belum aktif | [Dokumen pilot](CLAUDE-MEM-PILOT.md) |
 

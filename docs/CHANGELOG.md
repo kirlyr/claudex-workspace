@@ -9,6 +9,7 @@
   path utuh (tidak lagi menandai teks seperti `root-cause-tracing`).
 - Test baru: `--adopt`, validasi manifest, kegagalan install di tengah lalu rollback, penghapusan
   file obsolete, download dengan fetch ter-stub (host, hash, ukuran, cache). Fixture dibersihkan.
+- `runtime-check` dijalankan ulang oleh pengguna pada Codex CLI 0.166.0 (Windows): lulus.
 - `STATUS.md` dan `HISTORY-REVIEW.md` digabung menjadi satu catatan status dan insiden; nama
   repository, jumlah test dan perintah test diperbarui.
 
